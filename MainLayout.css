@@ -1,0 +1,77 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-around;
+    height: calc(100vh - 45px); /* Adjust for header height */
+    padding: 10px; /* Adjust the padding around the grid as needed */
+    box-sizing: border-box;
+  }
+  
+  .grid-item {
+    border: 1px solid #ccc; /* Optional: Add border to each grid item for clarity */
+    box-sizing: border-box;
+    background-color: white;
+    overflow: hidden; /* Remove scrollbars */
+    width: calc(33.33% - 20px); /* Each item takes a third of the container width minus the gap */
+    height: calc(50% - 20px); /* Each item takes half of the container height minus the gap */
+    display: flex; /* Use flexbox to center content */
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(128, 128, 128, 0.2);
+    padding: 20px;
+  }
+  
+  .grid-item > div {
+    width: 100%;
+    height: 100%;
+  }
+   
+  .grid-item:hover {
+    transform: scale(1.01); /* Slight zoom effect on hover */
+    box-shadow: 0 6px 12px rgba(128, 128, 128, 0.3); /* Slightly deeper shadow on hover */
+  }
+
+
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px; /* Adjust margin top as needed */
+    margin-bottom: 10px; /* Adjust margin bottom as needed */
+  }
+  
+  .button {
+    margin: 0 10px; /* Adjust margin between buttons */
+    padding: 10px 20px;
+    background-color: grey;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .button-selected {
+    margin: 0 10px; /* Adjust margin between buttons */
+    padding: 10px 20px;
+    background-color: green; /* Specific color for selected button */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: darkgray;
+  }
+  
+  .button-selected:hover {
+    background-color: #218838; /* Hover color for selected button */
+  }
