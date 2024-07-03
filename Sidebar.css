@@ -1,0 +1,65 @@
+/* Sidebar.css */
+
+.sidebar-container {
+    width: 250px; /* Adjust sidebar width as needed */
+    height: calc(100vh - 45px); /* Adjust for header height */
+    overflow-y: auto; /* Add scroll if content overflows */
+    border-right: 1px solid #dee2e6; /* Example border on the right */
+    background-color: #F0EBE3; /* Example background color */
+  }
+  
+  .sidebar-header {
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6; /* Example border at the bottom of header */
+  }
+  
+  .sidebar-header label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  #stateFilter {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .sidebar-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6; /* Example border at the bottom of each item */
+  }
+  
+  .sidebar-item-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Example box shadow */
+  }
+  
+  .sidebar-item-details {
+    flex: 1;
+  }
+  
+  .sidebar-item-name {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .sidebar-item-id {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #6c757d; /* Example text color */
+  }
+  
