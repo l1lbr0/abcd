@@ -1,7 +1,7 @@
 .main-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 90vh;
   }
   
   .flex-container {
@@ -9,7 +9,7 @@
     flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-around;
-    height: calc(100vh - 45px); /* Adjust for header height */
+    height: calc(87vh - 45px); /* Adjust for header height */
     padding: 10px; /* Adjust the padding around the grid as needed */
     box-sizing: border-box;
   }

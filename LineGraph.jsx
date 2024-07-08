@@ -194,6 +194,7 @@ const LineGraph = () => {
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+    
       <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1 }}>
         <select onChange={(e) => handleYearChange(parseInt(e.target.value))} value={selectedYear}>
           <option value={2021}>2021</option>
