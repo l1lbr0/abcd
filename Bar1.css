@@ -1,0 +1,13 @@
+.bar-container {
+    width: 25%; /* 25% of the page's width */
+    height: 90vh; /* 100% of the viewport height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .chart-wrapper {
+    width: 100%;
+    height: 100%; /* Ensure the chart takes up the full height */
+  }
+  

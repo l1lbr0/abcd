@@ -1,7 +1,7 @@
-// AdvisorBarGraph.jsx
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import './Bar1.css'; // Import the CSS file
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -24,7 +24,17 @@ const Bar1 = () => {
   };
 
   const options = {
+    indexAxis: 'y', // Make the bar chart horizontal
     responsive: true,
+    maintainAspectRatio: false, // Allow the chart to stretch
+    layout: {
+      padding: {
+        top: 20,
+        bottom: 20,
+        left: 20,
+        right: 20
+      }
+    },
     plugins: {
       legend: {
         display: true,
@@ -39,20 +49,26 @@ const Bar1 = () => {
       x: {
         title: {
           display: true,
-          text: 'AUM Segments (in Million $)', // Adding the label with "in Million $"
-        },
-      },
-      y: {
-        title: {
-          display: true,
           text: 'Number of Advisors',
         },
         beginAtZero: true,
       },
+      y: {
+        title: {
+          display: true,
+          text: 'AUM Segments (in Million $)', // Adding the label with "in Million $"
+        },
+      },
     },
   };
 
-  return <Bar data={data} options={options} />;
+  return (
+    <div className="bar-container">
+      <div className="chart-wrapper">
+        <Bar data={data} options={options} />
+      </div>
+    </div>
+  );
 };
 
 export default Bar1;
