@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import P2 from './P2';
+import P2 from './SegmentBar';
 import LineGraph from './LineGraph';
 import BarGraph from './BarGraph';
 import BarGraphReferral from './BarGraphReferral';
 import CustomerAdded from './CustomerAdded';
 import CustomerLeft from './CustomerLeft';
+import BarGraphBackend from './BarGraphBackend'
 import './MainLayout.css'; // Import the CSS file for styling
-
+import LineGraphBackend from './LineGraphBackend';
+import ReferralBackend from './ReferralBackend'
+import SegmentBar from './SegmentBar';
 const ProductAnalytics = () => {
   const [selectedButton, setSelectedButton] = useState('SubFirm');
 
@@ -37,13 +40,13 @@ const ProductAnalytics = () => {
       {/* Grid layout with components */}
       <div className="flex-container">
         <div className="grid-item">
-          <BarGraph selectedButton={selectedButton} />
+          <BarGraphBackend selectedButton={selectedButton} />
         </div>
         <div className="grid-item">
-          <LineGraph selectedButton={selectedButton} />
+          <LineGraphBackend selectedButton={selectedButton} />
         </div>
         <div className="grid-item">
-          <BarGraphReferral selectedButton={selectedButton} />
+          <ReferralBackend selectedButton={selectedButton} />
         </div>
         <div className="grid-item">
           <CustomerAdded selectedButton={selectedButton} />
@@ -52,7 +55,7 @@ const ProductAnalytics = () => {
           <CustomerLeft selectedButton={selectedButton} />
         </div>
         <div className="grid-item">
-          <P2 selectedButton={selectedButton} />
+          <SegmentBar selectedButton={selectedButton} />
         </div>
       </div>
     </div>

@@ -4,21 +4,30 @@ import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, Title, Toolt
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, Title, Tooltip, Legend, PointElement);
 
-const LineGraph = () => {
+const LineGraph = ({ selectedButton, id }) => {
   const [currentData, setCurrentData] = useState({
     labels: [],
     datasets: [],
   });
   const [selectedYear, setSelectedYear] = useState(2021);
   const [showNext, setShowNext] = useState(false);
-  const [selectedButton, setSelectedButton] = useState('SubFirm');
 
   // Function to fetch data from the backend
-  const fetchData = async (year, button) => {
+  const fetchData = async (year, button, id) => {
     try {
-      // const response = await fetch(`http://your-backend/api/data?year=${year}&button=${button}`);
-      // const data = await response.json();
-      const data = {
+      let data;
+      // if (button === 'SubFirm') {
+      //   const response = await fetch(`http://your-backend/api/subfirm/${id}/data?year=${year}`);
+      //   data = await response.json();
+      // } else if (button === 'ProductCategory') {
+      //   const response = await fetch(`http://your-backend/api/productcategory/${id}/data?year=${year}`);
+      //   data = await response.json();
+      // } else {
+      //   throw new Error('Invalid selectedButton value');
+      // }
+
+      // Mock data for demonstration
+      data = {
         "1": { "advisor": 12, "average": 14, "highest": 19 },
         "2": { "advisor": 15, "average": 17, "highest": 22 },
         "3": { "advisor": 20, "average": 24, "highest": 29 },
@@ -92,15 +101,15 @@ const LineGraph = () => {
 
   // Fetch data when component mounts or selectedYear/selectedButton/showNext changes
   useEffect(() => {
-    fetchData(selectedYear, selectedButton);
-  }, [selectedYear, selectedButton, showNext]);
+    fetchData(selectedYear, selectedButton, id);
+  }, [selectedYear, selectedButton, id, showNext]);
 
   // Function to handle year change
   const handleYearChange = (year) => {
     setSelectedYear(year);
   };
 
-  // Function to toggle between SubFirm and ProductCategory
+  // Function to toggle between showing the first 6 months and the last 6 months
   const toggleData = () => {
     setShowNext(!showNext);
   };
@@ -149,26 +158,26 @@ const LineGraph = () => {
       </div>
       <Line data={currentData} options={options} />
       <div
-  style={{
-    position: 'absolute',
-    bottom: '0px', // Adjusted to shift the arrow down
-    right: showNext ? 'auto' : '10px',
-    left: showNext ? '10px' : 'auto',
-    zIndex: 1,
-    textAlign: 'center',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-  }}
->
-  <div onClick={toggleData} style={{ fontSize: '20px', color: 'black' }}>
-    {showNext ? '←' : '→'}
-  </div>
-  <div onClick={toggleData} style={{ fontSize: '12px', color: 'black', marginLeft: '8px' }}>
-    {showNext ? 'Previous 6' : 'Next 6'}
-  </div>
-</div>
-
+        style={{
+          position: 'absolute',
+          bottom: '0px', // Adjusted to shift the arrow down
+          right: showNext ? 'auto' : '10px',
+          left: showNext ? '10px' : 'auto',
+          zIndex: 1,
+          textAlign: 'center',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+      <div onClick={toggleData} style={{ fontSize: '12px', color: 'black', marginLeft: '8px' }}>
+          {showNext ? 'Jan-Jun' : 'Jul-Dec'}
+        </div>
+        <div onClick={toggleData} style={{ fontSize: '20px', color: 'black' }}>
+          {showNext ? '←' : '→'}
+        </div>
+        
+      </div>
     </div>
   );
 };

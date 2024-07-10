@@ -1,138 +1,255 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
 
-const CustomerLeft = () => {
-  // Initial data for 5 years (can be replaced with your actual data)
-  const initialData = {
-    labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
-    datasets: [
-      {
-        label: 'Customers',
-        data: [8,3,5,6,1], // Replace with your actual data
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 206, 86, 0.6)',
-          'rgba(75, 192, 192, 0.6)',
-          'rgba(153, 102, 255, 0.6)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
 
-  const [currentData, setCurrentData] = useState(initialData);
-  const [currentStartYear, setCurrentStartYear] = useState(1); // Track the starting year of current dataset
+const CustomerLeft= ({ selectedButton, id }) => {
+    
 
-  // Function to handle moving to the next 5 years
-  const handleNext = () => {
-    if(currentStartYear+6<10){
-    // Replace with logic to fetch next 5 years data
-    // For demonstration, just updating labels and data
-    setCurrentData(prevData => ({
-      labels: ['Year 6', 'Year 7', 'Year 8', 'Year 9', 'Year 10'],
-      datasets: [
-        {
-          ...initialData.datasets[0],
-          data: [4,7,2,1,6], // Replace with next 5 years data
-        },
-      ],
-    }));
-    setCurrentStartYear(currentStartYear + 5); // Update starting year
-}
-  };
+    const [allData, setAllData] = useState([]); // State to store all fetched data
+    const [currentData, setCurrentData] = useState({
+        labels: [],
+        datasets: [],
+    });
+    const [currentStartYear, setCurrentStartYear] = useState(0); // Track the starting index of the current dataset
 
-  // Function to handle moving to the previous 5 years
-  const handlePrevious = () => {
-    // Ensure not to go back beyond Year 1
-    if (currentStartYear > 1) {
-      setCurrentData(prevData => ({
-        labels: [
-          `Year ${currentStartYear - 5}`,
-          `Year ${currentStartYear - 4}`,
-          `Year ${currentStartYear - 3}`,
-          `Year ${currentStartYear - 2}`,
-          `Year ${currentStartYear - 1}`,
-        ],
-        datasets: [
-          {
-            ...initialData.datasets[0],
-            data: [8,3,5,6,1], // Replace with previous 5 years data
-          },
-        ],
-      }));
-      setCurrentStartYear(currentStartYear - 5); // Update starting year
-    }
-  };
+    // Function to fetch data from the backend
+    const fetchData = async () => {
+        try {
+            let data;
+            // if (selectedButton === 'SubFirm') {
+            //     const response = await fetch(`http://your-backend/api/subfirm/${id}/years`);
+            //     data = await response.json();
+            // } else if (selectedButton === 'ProductCategory') {
+            //     const response = await fetch(`http://your-backend/api/productcategory/${id}/years`);
+            //     data = await response.json();
+            // } else {
+            //     throw new Error('Invalid selectedButton value');
+            // }
 
-  return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <Bar
-        data={currentData}
-        options={{
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: true,
-              position: 'top',
-            },
-            title: {
-        display: true,
-        text: 'Customers Left Yearly',
-        padding: {
-        top: 2, // Adjust the top padding as needed
-        bottom: 5, // Optional: Adjust bottom padding if necessary
-      },
-      },
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              title: {
-                display: true,
-                text: 'No. of Customers',
-              },
-            },
-            x: {
-              title: {
-                display: true,
-                text: 'Years',
-              },
-            },
-          },
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '10px',
-          left: '10px',
-          cursor: 'pointer',
-        }}
-        onClick={handlePrevious}
-      >
-        {'←'}
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '10px',
-          right: '10px',
-          cursor: 'pointer',
-        }}
-        onClick={handleNext}
-      >
-        {'→'}
-      </div>
-    </div>
-  );
+            // Mock data for demonstration
+            data = {
+                "2000": {
+                    "advisor": 68,
+                    "average": 44,
+                    "highest": 82
+                },
+                "2001": {
+                    "advisor": 33,
+                    "average": 60,
+                    "highest": 94
+                },
+                "2002": {
+                    "advisor": 64,
+                    "average": 74,
+                    "highest": 100
+                },
+                "2003": {
+                    "advisor": 63,
+                    "average": 42,
+                    "highest": 82
+                },
+                "2004": {
+                    "advisor": 76,
+                    "average": 77,
+                    "highest": 100
+                },
+                "2005": {
+                    "advisor": 57,
+                    "average": 74,
+                    "highest": 84
+                },
+                "2006": {
+                    "advisor": 36,
+                    "average": 55,
+                    "highest": 99
+                },
+                "2007": {
+                    "advisor": 71,
+                    "average": 57,
+                    "highest": 85
+                },
+                "2008": {
+                    "advisor": 52,
+                    "average": 40,
+                    "highest": 85
+                },
+                "2009": {
+                    "advisor": 34,
+                    "average": 53,
+                    "highest": 98
+                },
+                "2010": {
+                    "advisor": 73,
+                    "average": 52,
+                    "highest": 95
+                },
+                "2011": {
+                    "advisor": 60,
+                    "average": 49,
+                    "highest": 99
+                },
+                "2012": {
+                    "advisor": 38,
+                    "average": 48,
+                    "highest": 90
+                },
+                "2013": {
+                    "advisor": 50,
+                    "average": 34,
+                    "highest": 92
+                },
+                "2014": {
+                    "advisor": 71,
+                    "average": 42,
+                    "highest": 74
+                }
+            };
+
+            const formattedData = Object.keys(data).map(year => ({
+                year,
+                advisor: data[year].advisor,
+                average: data[year].average,
+                highest: data[year].highest,
+            }));
+            setAllData(formattedData);
+            setCurrentStartYear(0); // Initialize the start year index
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    // Function to update current data based on start year
+    const updateCurrentData = (startYear) => {
+        const labels = allData.slice(startYear, startYear + 5).map(item => item.year);
+        const advisorData = allData.slice(startYear, startYear + 5).map(item => item.advisor);
+        const averageData = allData.slice(startYear, startYear + 5).map(item => item.average);
+        const highestData = allData.slice(startYear, startYear + 5).map(item => item.highest);
+
+        setCurrentData({
+            labels,
+            datasets: [
+                {
+                    label: 'Advisor',
+                    data: advisorData,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Average',
+                    data: averageData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Highest',
+                    data: highestData,
+                    backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1,
+                },
+            ],
+        });
+    };
+
+    // Fetch data on component mount
+    useEffect(() => {
+        fetchData();
+    }, [selectedButton, id]);
+
+    // Update current data when allData or currentStartYear changes
+    useEffect(() => {
+        if (allData.length > 0) {
+            updateCurrentData(currentStartYear);
+        }
+    }, [allData, currentStartYear]);
+
+    // Function to handle moving to the next 5 years
+    const handleNext = () => {
+        if (currentStartYear + 5 < allData.length) {
+            setCurrentStartYear(currentStartYear + 5);
+        }
+    };
+
+    // Function to handle moving to the previous 5 years
+    const handlePrevious = () => {
+        if (currentStartYear > 0) {
+            setCurrentStartYear(currentStartYear - 5);
+        }
+    };
+
+    return (
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            <Bar
+                data={currentData}
+                options={{
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Customers Left Yearly',
+                            padding: {
+                                top: 2,
+                                bottom: 5,
+                            },
+                        },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'No. of Customers',
+                            },
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Years',
+                            },
+                        },
+                    },
+                }}
+            />
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: '0px',
+                    left: '10px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontSize: '12px', // Reduced font size
+                }}
+                onClick={handlePrevious}
+            >
+                <div style={{ marginRight: '5px' }}>{'←'}</div>
+                <div>Previous 5 Years</div>
+            </div>
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: '0px',
+                    right: '10px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontSize: '12px', // Reduced font size
+                }}
+                onClick={handleNext}
+            >
+                <div>Next 5 Years</div>
+                <div style={{ marginLeft: '5px' }}>{'→'}</div>
+            </div>
+
+           
+        </div>
+    );
 };
 
 export default CustomerLeft;
