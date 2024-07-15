@@ -1,184 +1,186 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, Title, Tooltip, Legend, PointElement } from 'chart.js';
+import styled from 'styled-components';
 
-ChartJS.register(CategoryScale, LinearScale, LineElement, Title, Tooltip, Legend, PointElement);
+const data = {
+  "2000": {
+      "advisor": 68,
+      "average": 44,
+      "highest": 82
+  },
+  "2001": {
+      "advisor": 33,
+      "average": 60,
+      "highest": 94
+  },
+  "2002": {
+      "advisor": 64,
+      "average": 74,
+      "highest": 100
+  },
+  "2003": {
+      "advisor": 63,
+      "average": 42,
+      "highest": 82
+  },
+  "2004": {
+      "advisor": 76,
+      "average": 77,
+      "highest": 100
+  },
+  "2005": {
+      "advisor": 57,
+      "average": 74,
+      "highest": 84
+  },
+  "2006": {
+      "advisor": 36,
+      "average": 55,
+      "highest": 99
+  },
+  "2007": {
+      "advisor": 71,
+      "average": 57,
+      "highest": 85
+  },
+  "2008": {
+      "advisor": 52,
+      "average": 40,
+      "highest": 85
+  },
+  "2009": {
+      "advisor": 34,
+      "average": 53,
+      "highest": 98
+  },
+  "2010": {
+      "advisor": 73,
+      "average": 52,
+      "highest": 95
+  },
+  "2011": {
+      "advisor": 60,
+      "average": 49,
+      "highest": 99
+  },
+  "2012": {
+      "advisor": 38,
+      "average": 48,
+      "highest": 90
+  },
+  "2013": {
+      "advisor": 50,
+      "average": 34,
+      "highest": 92
+  },
+  "2014": {
+      "advisor": 71,
+      "average": 42,
+      "highest": 74
+  }
+};
 
-const LineGraph = ({ selectedButton, id }) => {
-  const [currentData, setCurrentData] = useState({
-    labels: [],
-    datasets: [],
-  });
-  const [selectedYear, setSelectedYear] = useState(2021);
-  const [showNext, setShowNext] = useState(false);
 
-  // Function to fetch data from the backend
-  const fetchData = async (year, button, id) => {
-    try {
-      let data;
-      // if (button === 'SubFirm') {
-      //   const response = await fetch(`http://your-backend/api/subfirm/${id}/data?year=${year}`);
-      //   data = await response.json();
-      // } else if (button === 'ProductCategory') {
-      //   const response = await fetch(`http://your-backend/api/productcategory/${id}/data?year=${year}`);
-      //   data = await response.json();
-      // } else {
-      //   throw new Error('Invalid selectedButton value');
-      // }
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
 
-      // Mock data for demonstration
-      data = {
-        "1": { "advisor": 12, "average": 14, "highest": 19 },
-        "2": { "advisor": 15, "average": 17, "highest": 22 },
-        "3": { "advisor": 20, "average": 24, "highest": 29 },
-        "4": { "advisor": 18, "average": 22, "highest": 27 },
-        "5": { "advisor": 25, "average": 28, "highest": 32 },
-        "6": { "advisor": 30, "average": 33, "highest": 37 },
-        "7": { "advisor": 28, "average": 31, "highest": 35 },
-        "8": { "advisor": 33, "average": 36, "highest": 40 },
-        "9": { "advisor": 35, "average": 38, "highest": 42 },
-        "10": { "advisor": 40, "average": 43, "highest": 45 },
-        "11": { "advisor": 38, "average": 41, "highest": 44 },
-        "12": { "advisor": 45, "average": 47, "highest": 50 }
-      };
+const ButtonContainer = styled.div`
+  margin-top: 10px;
+`;
 
-      const labels = Object.keys(data).map(month => {
-        switch (month) {
-          case "1": return "January";
-          case "2": return "February";
-          case "3": return "March";
-          case "4": return "April";
-          case "5": return "May";
-          case "6": return "June";
-          case "7": return "July";
-          case "8": return "August";
-          case "9": return "September";
-          case "10": return "October";
-          case "11": return "November";
-          case "12": return "December";
-          default: return "";
-        }
-      });
+const ArrowButton = styled.button`
+  margin: 0 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+`;
 
-      const advisorData = Object.values(data).map(item => item.advisor);
-      const averageData = Object.values(data).map(item => item.average);
-      const highestData = Object.values(data).map(item => item.highest);
+const LineGraph = () => {
+  const [yearsToShow, setYearsToShow] = useState(5);
 
-      // Set data for the first 6 months or the last 6 months based on showNext
-      const startIndex = showNext ? 6 : 0;
-      const endIndex = showNext ? 12 : 6;
-
-      setCurrentData({
-        labels: labels.slice(startIndex, endIndex),
-        datasets: [
-          {
-            label: 'Advisor',
-            data: advisorData.slice(startIndex, endIndex),
-            borderColor: 'rgba(75,192,192,1)',
-            backgroundColor: 'rgba(75,192,192,0.2)',
-            fill: true,
-          },
-          {
-            label: 'Average',
-            data: averageData.slice(startIndex, endIndex),
-            borderColor: 'rgba(153,102,255,1)',
-            backgroundColor: 'rgba(153,102,255,0.2)',
-            fill: true,
-          },
-          {
-            label: 'Highest',
-            data: highestData.slice(startIndex, endIndex),
-            borderColor: 'rgba(255,99,132,1)',
-            backgroundColor: 'rgba(255,99,132,0.2)',
-            fill: true,
-          },
-        ],
-      });
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+  const handleRightClick = () => {
+    setYearsToShow((prev) => (prev === 5 ? 10 : prev === 10 ? 15 : 15));
   };
 
-  // Fetch data when component mounts or selectedYear/selectedButton/showNext changes
-  useEffect(() => {
-    fetchData(selectedYear, selectedButton, id);
-  }, [selectedYear, selectedButton, id, showNext]);
-
-  // Function to handle year change
-  const handleYearChange = (year) => {
-    setSelectedYear(year);
+  const handleLeftClick = () => {
+    setYearsToShow((prev) => (prev === 15 ? 10 : prev === 10 ? 5 : 5));
   };
 
-  // Function to toggle between showing the first 6 months and the last 6 months
-  const toggleData = () => {
-    setShowNext(!showNext);
-  };
+  const filteredData = Object.entries(data)
+    .slice(0, yearsToShow)
+    .map(([year, values]) => ({ year, ...values }));
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'top',
+  const chartData = {
+    labels: filteredData.map((item) => item.year),
+    datasets: [
+      {
+        label: 'Advisor',
+        data: filteredData.map((item) => item.advisor),
+        fill: false,
+        backgroundColor: 'rgba(75,192,192,0.4)',
+        borderColor: 'rgba(75,192,192,1)',
       },
-      title: {
-        display: true,
-        text: 'AUM Monthly Analysis',
-        padding: {
-          top: 2, // Adjust the top padding as needed
-          bottom: 5, // Optional: Adjust bottom padding if necessary
-        },
+      {
+        label: 'Average',
+        data: filteredData.map((item) => item.average),
+        fill: false,
+        backgroundColor: 'rgba(153,102,255,0.4)',
+        borderColor: 'rgba(153,102,255,1)',
       },
-    },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'Months',
-        },
+      {
+        label: 'Highest',
+        data: filteredData.map((item) => item.highest),
+        fill: false,
+        backgroundColor: 'rgba(255,159,64,0.4)',
+        borderColor: 'rgba(255,159,64,1)',
       },
-      y: {
-        title: {
-          display: true,
-          text: 'AUM (Million $)',
-        },
-        beginAtZero: true,
-      },
-    },
+    ],
   };
 
   return (
-    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-      <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1 }}>
-        <select onChange={(e) => handleYearChange(parseInt(e.target.value))} value={selectedYear}>
-          <option value={2021}>2021</option>
-          <option value={2022}>2022</option>
-          <option value={2023}>2023</option>
-        </select>
-      </div>
-      <Line data={currentData} options={options} />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '0px', // Adjusted to shift the arrow down
-          right: showNext ? 'auto' : '10px',
-          left: showNext ? '10px' : 'auto',
-          zIndex: 1,
-          textAlign: 'center',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-      <div onClick={toggleData} style={{ fontSize: '12px', color: 'black', marginLeft: '8px' }}>
-          {showNext ? 'Jan-Jun' : 'Jul-Dec'}
-        </div>
-        <div onClick={toggleData} style={{ fontSize: '20px', color: 'black' }}>
-          {showNext ? '←' : '→'}
-        </div>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <Line
+        data={chartData}
         
-      </div>
+            
+      
+    />
+    <div
+        style={{
+            position: 'absolute',
+            bottom: '0px',
+            left: '10px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '12px', // Reduced font size
+        }}
+        onClick={handleLeftClick}
+    >
+        <div style={{ marginRight: '5px' }}>{'←'}</div>
+        
     </div>
+    <div
+        style={{
+            position: 'absolute',
+            bottom: '0px',
+            right: '10px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '12px', // Reduced font size
+        }}
+        onClick={handleRightClick}
+    >
+        
+        <div style={{ marginLeft: '5px' }}>{'→'}</div>
+    </div>
+
+   
+</div>
   );
 };
 
