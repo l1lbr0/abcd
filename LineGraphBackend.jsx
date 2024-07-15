@@ -144,7 +144,38 @@ const LineGraph = () => {
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
     <Line
         data={chartData}
-        
+        options= {{
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'AUM YEARLY ANALYSIS',
+                            padding: {
+                                top: 2,
+                                bottom: 5,
+                            },
+                        },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'AUM (MM$)',
+                            },
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Years',
+                            },
+                        },
+                    },
+                }}
             
       
     />
