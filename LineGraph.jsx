@@ -1,227 +1,135 @@
 import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, Title, Tooltip, Legend, PointElement } from 'chart.js';
+import styled from 'styled-components';
 
-ChartJS.register(CategoryScale, LinearScale, LineElement, Title, Tooltip, Legend, PointElement);
+const data = {
+  1: { advisor: 68, average: 44, highest: 82 },
+  2: { advisor: 33, average: 60, highest: 94 },
+  3: { advisor: 64, average: 74, highest: 100 },
+  4: { advisor: 63, average: 42, highest: 82 },
+  5: { advisor: 76, average: 77, highest: 100 },
+  6: { advisor: 57, average: 74, highest: 84 },
+  7: { advisor: 36, average: 55, highest: 99 },
+  8: { advisor: 71, average: 57, highest: 85 },
+  9: { advisor: 52, average: 40, highest: 85 },
+  10: { advisor: 34, average: 53, highest: 98 },
+  11: { advisor: 73, average: 52, highest: 95 },
+  12: { advisor: 60, average: 49, highest: 99 },
+};
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  position: relative;
+`;
+
+const ButtonContainer = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+`;
+
+const ArrowButton = styled.button`
+  padding: 5px 10px;
+  cursor: pointer;
+`;
 
 const LineGraph = () => {
-  const initialData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+  const [monthsToShow, setMonthsToShow] = useState(3);
+
+  const handleRightClick = () => {
+    setMonthsToShow((prev) => (prev === 3 ? 6 : prev === 6 ? 9 : prev === 9 ? 12 : 12));
+  };
+
+  const handleLeftClick = () => {
+    setMonthsToShow((prev) => (prev === 12 ? 9 : prev === 9 ? 6 : prev === 6 ? 3 : 3));
+  };
+
+  const filteredData = Object.entries(data)
+    .slice(0, monthsToShow)
+    .map(([month, values]) => ({ month, ...values }));
+
+  const chartData = {
+    labels: filteredData.map((item) => {
+      // Convert numeric month to name
+      const monthNames = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ];
+      return monthNames[item.month - 1]; // Adjust index for array
+    }),
     datasets: [
       {
         label: 'Advisor',
-        data: [8, 14, 20, 45, 22, 26],
+        data: filteredData.map((item) => item.advisor),
+        fill: false,
+        backgroundColor: 'rgba(75,192,192,0.4)',
         borderColor: 'rgba(75,192,192,1)',
-        backgroundColor: 'rgba(75,192,192,0.2)',
-        fill: true,
       },
       {
         label: 'Average',
-        data: [10, 15, 25, 35, 28, 30],
+        data: filteredData.map((item) => item.average),
+        fill: false,
+        backgroundColor: 'rgba(153,102,255,0.4)',
         borderColor: 'rgba(153,102,255,1)',
-        backgroundColor: 'rgba(153,102,255,0.2)',
-        fill: true,
       },
       {
         label: 'Highest',
-        data: [15, 25, 35, 55, 35, 40],
-        borderColor: 'rgba(255,99,132,1)',
-        backgroundColor: 'rgba(255,99,132,0.2)',
-        fill: true,
+        data: filteredData.map((item) => item.highest),
+        fill: false,
+        backgroundColor: 'rgba(255,159,64,0.4)',
+        borderColor: 'rgba(255,159,64,1)',
       },
     ],
-  };
-
-  const nextData = {
-    labels: ['July', 'August', 'September', 'October', 'November', 'December'],
-    datasets: [
-      {
-        label: 'Advisor',
-        data: [30, 35, 28, 42, 38, 45],
-        borderColor: 'rgba(75,192,192,1)',
-        backgroundColor: 'rgba(75,192,192,0.2)',
-        fill: true,
-      },
-      {
-        label: 'Average',
-        data: [32, 30, 33, 40, 37, 43],
-        borderColor: 'rgba(153,102,255,1)',
-        backgroundColor: 'rgba(153,102,255,0.2)',
-        fill: true,
-      },
-      {
-        label: 'Highest',
-        data: [40, 45, 42, 50, 48, 52],
-        borderColor: 'rgba(255,99,132,1)',
-        backgroundColor: 'rgba(255,99,132,0.2)',
-        fill: true,
-      },
-    ],
-  };
-
-  const [currentData, setCurrentData] = useState(initialData);
-  const [showNext, setShowNext] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(2021);
-
-  const toggleData = () => {
-    if (showNext) {
-      setCurrentData(initialData);
-    } else {
-      setCurrentData(nextData);
-    }
-    setShowNext(!showNext);
-  };
-
-  const handleYearChange = (year) => {
-    setSelectedYear(year);
-    setCurrentData(yearwiseData[year]);
-  };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'AUM Monthly Analysis',
-        padding: {
-          top: 2, // Adjust the top padding as needed
-          bottom: 5, // Optional: Adjust bottom padding if necessary
-        },
-      },
-    },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'Months',
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'AUM (Million $)',
-        },
-        beginAtZero: true,
-      },
-    },
-  };
-
-  // Mock data for three years
-  const yearwiseData = {
-    2021: {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-      datasets: [
-        {
-          label: 'Advisor',
-          data: [8, 14, 20, 45, 22, 26],
-          borderColor: 'rgba(75,192,192,1)',
-          backgroundColor: 'rgba(75,192,192,0.2)',
-          fill: true,
-        },
-        {
-          label: 'Average',
-          data: [10, 15, 25, 35, 28, 30],
-          borderColor: 'rgba(153,102,255,1)',
-          backgroundColor: 'rgba(153,102,255,0.2)',
-          fill: true,
-        },
-        {
-          label: 'Highest',
-          data: [15, 25, 35, 55, 35, 40],
-          borderColor: 'rgba(255,99,132,1)',
-          backgroundColor: 'rgba(255,99,132,0.2)',
-          fill: true,
-        },
-      ],
-    },
-    2022: {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-      datasets: [
-        {
-          label: 'Advisor',
-          data: [12, 18, 24, 50, 30, 35],
-          borderColor: 'rgba(75,192,192,1)',
-          backgroundColor: 'rgba(75,192,192,0.2)',
-          fill: true,
-        },
-        {
-          label: 'Average',
-          data: [15, 20, 30, 40, 35, 40],
-          borderColor: 'rgba(153,102,255,1)',
-          backgroundColor: 'rgba(153,102,255,0.2)',
-          fill: true,
-        },
-        {
-          label: 'Highest',
-          data: [20, 30, 40, 60, 45, 50],
-          borderColor: 'rgba(255,99,132,1)',
-          backgroundColor: 'rgba(255,99,132,0.2)',
-          fill: true,
-        },
-      ],
-    },
-    2023: {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-      datasets: [
-        {
-          label: 'Advisor',
-          data: [15, 25, 35, 60, 40, 50],
-          borderColor: 'rgba(75,192,192,1)',
-          backgroundColor: 'rgba(75,192,192,0.2)',
-          fill: true,
-        },
-        {
-          label: 'Average',
-          data: [18, 26, 38, 45, 42, 48],
-          borderColor: 'rgba(153,102,255,1)',
-          backgroundColor: 'rgba(153,102,255,0.2)',
-          fill: true,
-        },
-        {
-          label: 'Highest',
-          data: [25, 35, 45, 65, 50, 55],
-          borderColor: 'rgba(255,99,132,1)',
-          backgroundColor: 'rgba(255,99,132,0.2)',
-          fill: true,
-        },
-      ],
-    },
   };
 
   return (
-    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-    
-      <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1 }}>
-        <select onChange={(e) => handleYearChange(parseInt(e.target.value))} value={selectedYear}>
-          <option value={2021}>2021</option>
-          <option value={2022}>2022</option>
-          <option value={2023}>2023</option>
-        </select>
-      </div>
-      <Line data={currentData} options={options} />
-      <div
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <Line
+        data={chartData}
+        
+            
+      
+    />
+    <div
         style={{
-          position: 'absolute',
-          bottom: '10px',
-          right: showNext ? 'auto' : '10px',
-          left: showNext ? '10px' : 'auto',
-          zIndex: 1,
-          textAlign: 'center',
-          cursor: 'pointer',
+            position: 'absolute',
+            bottom: '0px',
+            left: '10px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '12px', // Reduced font size
         }}
-      >
-        <div style={{ fontSize: '12px', color: 'black', marginBottom: '2px' }}>
-          
-        </div>
-        <div onClick={toggleData} style={{ fontSize: '20px', color: 'black' }}>
-          {showNext ? '←' : '→'}
-        </div>
-      </div>
+        onClick={handleLeftClick}
+    >
+        <div style={{ marginRight: '5px' }}>{'←'}</div>
+        
     </div>
+    <div
+        style={{
+            position: 'absolute',
+            bottom: '0px',
+            right: '10px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '12px', // Reduced font size
+        }}
+        onClick={handleRightClick}
+    >
+        
+        <div style={{ marginLeft: '5px' }}>{'→'}</div>
+    </div>
+
+   
+</div>
   );
 };
 
